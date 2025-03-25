@@ -2,9 +2,15 @@
 
 ### GET STARTED
 
-1. ** Clone Repository**
+# SneakersLab
 
-https://github.com/Frantz-tech/SneakersLab.git
+### GET STARTED
+
+1. **Clone repository**:
+
+```bash
+git clone https://github.com/Frantz-tech/SneakersLab.git
+```
 
 2. Install dependencies
 
