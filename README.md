@@ -36,7 +36,7 @@ This will start the server on port "http://Localhost:3000"
 `├──` [README.md](./README.md) <br>
 `└──` [server.js](./server.js) <br>
 
-## Structure du projet
+## Project structure
 
 Here's an overview of the project repository structure :
 
