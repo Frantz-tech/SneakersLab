@@ -14,6 +14,12 @@ git clone https://github.com/Frantz-tech/SneakersLab.git
 npm install
 ```
 
+```bash
+npm start
+```
+
+This will start the server on port "http://Localhost:3000"
+
 # 📂 SneakersLab
 
 `├──` [config](./config/) <br>
@@ -43,14 +49,6 @@ Here's an overview of the project repository structure :
 - `services/` : Contains services that hold the business logic
 - `tests/` : Contains unit and integrations tests
 - `utils/` : Contains general utilities (helpers, error handling, etc.)
-
-## Lancement du server
-
-```bash
-npm start
-```
-
-This will start the server on port "http://Localhost:3000"
 
 ## Contribution
 
