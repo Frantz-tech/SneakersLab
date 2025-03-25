@@ -1,31 +1,34 @@
 # SneakersLab
 
-Initialisation du projet :
+### GET STARTED
 
-Ajout des outils de qualité de code & gestion des commits
+1. Clone Repository :
 
-liste des installations :
+```https://github.com/Frantz-tech/SneakersLab.git
 
-- npm init @eslint/config@latest
-- npx eslint yourfile.js
-- npm install --save-dev --save-exact prettier
-- node --eval "fs.writeFileSync('.prettierrc','{}\n')"
-- npm install -- save-dev husky
-- npx husky init
-- npm install --save-dev lint-staged
-- npm lint-staged --help
-- npm install --save-de @commitlint/{cli,config-conventional}
-- echo "export default {extends: ['@commitlint/config-conventional']};" > commitlint.config.js
-- npm install --save-dev @commitlint/cz-commitlint commitizen inquirer@9
+```
 
-Dans le package.json
-{
-"scripts": {
-"commit": "git-cz"
-},
-"config": {
-"commitizen": {
-"path": "@commitlint/cz-commitlint"
-}
-}
-}
+2. Install dependencies
+
+npm install
+
+# 📂 SneakersLab
+
+├── [server.js](./server.js)
+├── [config](./config/)
+│ └── [database.js](./config/database.js)
+├── [controllers](./controllers/)
+│ ├── [userController.js](./controllers/userController.js)
+│ └── [postController.js](./controllers/postController.js)
+├── [models](./models/)
+│ ├── [userModel.js](./models/userModel.js)
+│ └── [postModel.js](./models/postModel.js)
+├── [routes](./routes/)
+│ └── [userRoutes.js](./routes/userRoutes.js)
+├── [tests](./tests/)
+│ ├── [user.test.js](./tests/user.test.js)
+│ └── [post.test.js](./tests/post.test.js)
+├── [public](./public/)
+│ └── [index.html](./public/index.html)
+├── [README.md](./README.md)
+└── [package.json](./package.json)
