@@ -10,15 +10,15 @@
   "scripts": {
     "test": "",
     "start": "node server.js",
-    "prettier": "npx prettier . --write",
-    "prepare": "husky",
+    "prettier": "prettier . --write",
+    "prepare": "husky && husky install",
     "commit": "git-cz"
   },
   "lint-staged": {
-    "*.js": "eslint --fix",
-    "*.ts": "eslint --fix",
-    "*.css": "prettier --write",
-    "*.json": "prettier --write"
+    "*.{js,css,md}": [
+      "eslint --cache --fix",
+      "prettier --write"
+    ]
   },
   "config": {
     "commitizen": {

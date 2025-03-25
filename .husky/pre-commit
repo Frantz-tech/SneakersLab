@@ -1,9 +1,5 @@
-npm test
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
 
+# Exécuter lint-staged
 npx lint-staged
-
-# Si lint-staged échoue, empêcher le commit
-if [ $? -ne 0 ]; then
-  echo "Linting failed. Please fix the issues before committing."
-  exit 1
-fi
