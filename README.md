@@ -4,9 +4,7 @@
 
 1. ** Clone Repository**
 
-```https://github.com/Frantz-tech/SneakersLab.git
-
-```
+https://github.com/Frantz-tech/SneakersLab.git
 
 2. Install dependencies
 
