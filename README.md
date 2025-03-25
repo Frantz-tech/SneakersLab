@@ -12,12 +12,13 @@
 git clone https://github.com/Frantz-tech/SneakersLab.git
 ```
 
-2. Install dependencies
+2. **Install dependencies**
 
 npm install
 
 # 📂 SneakersLab
 
+```
 ├── [config](./config/)
 ├── [controllers](./controllers/)
 ├── [middleware](./middleware/)
@@ -31,3 +32,4 @@ npm install
 ├── [package.json](./package.json)
 ├── [README.md](./README.md)
 └── [server.js](./server.js)
+```
