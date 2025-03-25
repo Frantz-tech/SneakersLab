@@ -18,18 +18,16 @@ npm install
 
 # 📂 SneakersLab
 
-```
-├── [config](./config/)
-├── [controllers](./controllers/)
-├── [middleware](./middleware/)
-├── [models](./models/)
-├── [public](./public/)
-├── [repository](./repository/)
-├── [routes](./routes/)
-├── [services](./services/)
-├── [tests](./tests/)
-├── [utils](./utils/)
-├── [package.json](./package.json)
-├── [README.md](./README.md)
-└── [server.js](./server.js)
-```
+`├──` [config](./config/) <br>
+`├──` [controllers](./controllers/) <br>
+`├──` [middleware](./middleware/)<br>
+`├──` [models](./models/) <br>
+`├──` [public](./public/)<br>
+`├──` [repository](./repository/) <br>
+`├──` [routes](./routes/) <br>
+`├──` [services](./services/) <br>
+`├──` [tests](./tests/) <br>
+`├──` [utils](./utils/) <br>
+`├──` [package.json](./package.json) <br>
+`├──` [README.md](./README.md) <br>
+`└──` [server.js](./server.js) <br>
