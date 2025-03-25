@@ -2,7 +2,7 @@
 
 ### GET STARTED
 
-1. Clone Repository :
+1. ** Clone Repository**
 
 ```https://github.com/Frantz-tech/SneakersLab.git
 
