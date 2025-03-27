@@ -13,6 +13,8 @@
     "prettier": "prettier . --write",
     "prepare": "husky && husky install",
     "commit": "git-cz",
+    "migrate": "prisma migrate dev",
+    "db:push": "prisma db push",
     "db:view": "prisma studio"
   },
   "lint-staged": {
