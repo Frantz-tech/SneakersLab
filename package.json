@@ -12,7 +12,8 @@
     "start": "node server.js",
     "prettier": "prettier . --write",
     "prepare": "husky && husky install",
-    "commit": "git-cz"
+    "commit": "git-cz",
+    "db:view": "prisma studio"
   },
   "lint-staged": {
     "*.{js,css,md}": [
@@ -47,6 +48,11 @@
     "husky": "^9.1.7",
     "inquirer": "^9.3.7",
     "lint-staged": "^15.5.0",
-    "prettier": "3.5.3"
+    "prettier": "3.5.3",
+    "prisma-dbml-generator": "^0.12.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.5.0",
+    "prisma": "^6.5.0"
   }
 }

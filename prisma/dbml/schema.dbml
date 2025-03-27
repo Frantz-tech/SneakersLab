@@ -1,0 +1,63 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id Int [pk, increment]
+  userName String [not null]
+  firstName String [not null]
+  dateNaissance DateTime [unique, not null]
+  email String [unique, not null]
+  password String [unique, not null]
+  pseudo String [unique, not null]
+  profilPic String
+  expertise String [not null]
+  dateInscription DateTime [default: `now()`, not null]
+  bio String [not null]
+  status Boolean [not null, default: true]
+  badges Badge [not null]
+  usersGroupes UsersGroup [not null]
+}
+
+Table Badge {
+  id Int [pk, increment]
+  name BadgeType [not null]
+  icon String [not null]
+  userId Int [not null]
+  user User [not null]
+}
+
+Table Group {
+  id Int [pk, increment]
+  adminId Int [not null]
+  name String [not null]
+  type String [not null]
+  nbMembres Int [not null, default: 0]
+  maxMembres Int
+  dateCreation DateTime [default: `now()`, not null]
+  usersGroupes UsersGroup [not null]
+}
+
+Table UsersGroup {
+  id Int [pk, increment]
+  membreId Int [not null]
+  groupId Int [not null]
+  dateAdhesion DateTime [default: `now()`, not null]
+  isAdmin Boolean [not null, default: false]
+  membre User [not null]
+  group Group [not null]
+}
+
+Enum BadgeType {
+  Influenceur
+  Professionnel
+  Fidèle
+  Modérateur
+  Community_Helper
+}
+
+Ref: Badge.userId > User.id
+
+Ref: UsersGroup.membreId > User.id
+
+Ref: UsersGroup.groupId > Group.id

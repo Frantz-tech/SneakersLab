@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// Prisma schema for SneakersLabs
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
+
+// =====================
+//        MODELS
+// =====================
+
+model User {
+  id              Int            @id @default(autoincrement())
+  userName        String         @db.VarChar(50)
+  firstName       String         @db.VarChar(50)
+  dateNaissance   DateTime       @unique
+  email           String         @unique @db.VarChar(200)
+  password        String         @unique @db.VarChar(250)
+  pseudo          String         @unique @db.VarChar(100)
+  profilPic       String?        @db.Text
+  expertise       String         @db.VarChar(50)
+  dateInscription DateTime       @default(now())
+  bio             String         @db.VarChar(250)
+  status          Boolean        @default(true)
+  badges          Badge[]
+  usersGroupes    UsersGroup[]
+}
+
+model Badge {
+  id      Int    @id @default(autoincrement())
+  name    BadgeType
+  icon    String @db.Text
+  userId  Int
+  user    User   @relation(fields: [userId], references: [id])
+}
+
+model Group {
+  id            Int            @id @default(autoincrement())
+  adminId       Int
+  name          String         @db.VarChar(100)
+  type          String         @db.VarChar(10)
+  nbMembres     Int            @default(0)
+  maxMembres    Int?           
+  dateCreation  DateTime       @default(now())
+  usersGroupes  UsersGroup[]
+}
+
+model UsersGroup {
+  id           Int       @id @default(autoincrement())
+  membreId     Int
+  groupId      Int
+  dateAdhesion DateTime  @default(now())
+  isAdmin      Boolean   @default(false)
+  membre       User      @relation(fields: [membreId], references: [id])
+  group        Group     @relation(fields: [groupId], references: [id])
+}
+
+// =====================
+//        ENUMS
+// =====================
+
+enum BadgeType {
+  Influenceur
+  Professionnel
+  Fidèle
+  Modérateur
+  Community_Helper
+}
