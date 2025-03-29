@@ -18,7 +18,8 @@
     "db:push": "prisma db push",
     "db:view": "prisma studio",
     "db:reset": "prisma migrate reset",
-    "db:status": "prisma migrate status"
+    "db:status": "prisma migrate status",
+    "dev": "node --watch server.js"
   },
   "lint-staged": {
     "*.{js,css,md}": [
