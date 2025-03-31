@@ -11,7 +11,7 @@
     "test": "",
     "start": "node server.js",
     "prettier": "prettier . --write",
-    "prepare": "husky && husky install",
+    "prepare": "husky",
     "commit": "git-cz",
     "db:view": "prisma studio"
   },
