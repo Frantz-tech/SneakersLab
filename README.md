@@ -60,3 +60,12 @@ If you want to contribute on this project, here's how to proceed :
 4. Commit changes (`git commit -am ' add a new functionality'`)
 5. Push your branch (`git push origin feature/new-functionality`)
 6. Open a pull request
+
+## Usefull commands
+
+npm run commit -> for conventionals commits
+npm run migrate -> create new migration
+npm run db:push -> synchronize prisma with database without generating a migration file
+npm run db:view -> open prisma database in browser
+npm run db:reset -> delete database and re-aply migrations, prisma will send a confirm before proceed
+npm run db:status -> statement of migrations
