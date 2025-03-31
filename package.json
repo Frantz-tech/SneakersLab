@@ -9,9 +9,10 @@
   },
   "scripts": {
     "test": "",
-    "start": "node server.js",
+    "start": "node index.js",
+    "dev": "node --watch index.js",
     "prettier": "prettier . --write",
-    "prepare": "husky && husky init",
+    "prepare": "husky",
     "commit": "git-cz",
     "migrate": "prisma migrate dev",
     "db:push": "prisma db push",
@@ -57,6 +58,8 @@
   },
   "dependencies": {
     "@prisma/client": "^6.5.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
     "prisma": "^6.5.0"
   }
 }

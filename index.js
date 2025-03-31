@@ -1,45 +1,13 @@
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+import express from 'express';
+import cors from "cors";
+import { PORT } from './config.js';
+import { routes } from './routes/routes.js';
 
-async function main() {
-  // Création d'un utilisateur avec les nouveaux champs
-  const utilisateurTest = await prisma.user.create({
-    data: {
-      userName: "testuser",
-      firstName: "Test",
-      dateNaissance: new Date("2000-01-01"), // Exemple de date
-      email: "testuser@example.com",
-      password: "hashedpassword", // Assurez-vous de hacher le mot de passe
-      pseudo: "testpseudo",
-      profilPic: null,
-      expertise: "Développement",
-      bio: "Bio de l'utilisateur",
-      badges: {
-        create: [
-          {
-            name: "Influenceur",
-            icon: "icon_url",
-          },
-        ],
-      },
-    },
-  });
+const app = express();
+app.use(express.json());
+app.use(cors());
+routes(app);
+app.listen(PORT);
 
-  console.log("Utilisateur de test créé:", utilisateurTest);
+console.log(`Server on http://localhost:${ PORT }`);
 
-  // Récupération de tous les utilisateurs avec leurs badges et groupes
-  const utilisateurs = await prisma.user.findMany({
-    include: {
-      badges: true,
-      usersGroupes: true,
-    },
-  });
-
-  console.log("Liste des utilisateurs:", utilisateurs);
-}
-
-main()
-  .catch((e) => console.error(e))
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
