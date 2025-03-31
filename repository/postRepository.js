@@ -1,6 +1,6 @@
-import Post from "../models/mongoSchema.js";
+import Post from "../models/postsSchema.js";
 
-export const createPost = async (postData) => {
+export const createPostRepository = async (postData) => {
   try {
     const newPost = new Post(postData); // Création d'une nouvelle instance de post
     const savedPost = await newPost.save(); // Sauvegarde le post dans la bdd
@@ -10,7 +10,7 @@ export const createPost = async (postData) => {
   }
 };
 
-export const getPostById = async (postId) => {
+export const getPostByIdRepository = async (postId) => {
   try {
     // On récupere les post par id avec findById
     const getPostById = await Post.findById(postId);
@@ -26,19 +26,22 @@ export const getPostById = async (postId) => {
   }
 };
 
-export const getAllPost = async (allPostData = {}) => {
+export const getAllPostRepository = async () => {
   try {
     // On récupere tout les post avec .find
-    const getPost = await Post.find(allPostData);
+    const getPost = await Post.find();
     return getPost;
   } catch (error) {
     throw new Error("Erreur lors de la récupération de tous les posts :", error.message);
   }
 };
 
-export const updatePost = async (postId, updateData) => {
+export const updatePostRepository = async (postId, updateData) => {
   try {
     // On récupère le post que l'ont veut modifier
+    const post = await Post.findById(postId);
+    console.log("Post à modifier :  ", post);
+
     const updatedPost = await Post.findByIdAndUpdate(
       postId, // L'id du post à modifier
       updateData, // Les nouvelles données du post
@@ -54,7 +57,7 @@ export const updatePost = async (postId, updateData) => {
   }
 };
 
-export const deletePost = async (postId) => {
+export const deletePostRepository = async (postId) => {
   try {
     // On récupere le post que l'on veut delete
     const deletedPost = await Post.findByIdAndDelete(postId);
@@ -69,4 +72,4 @@ export const deletePost = async (postId) => {
   }
 };
 
-// utilser find ou findById ou save ou findByIdAndDelete
+// utiliser find ou findById ou save ou findByIdAndDelete
