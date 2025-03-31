@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const Schema = new mongoose.Schema(
+const SchemaPost = new mongoose.Schema(
   {
     public: {
       type: Boolean,
@@ -28,6 +28,6 @@ const Schema = new mongoose.Schema(
   { timestamps: true }, // Ajoute automatiquement createdAt et updatedAt
 );
 
-const Post = new mongoose.model("Post", Schema);
+const Post = new mongoose.model("Post", SchemaPost);
 
 export default Post;

@@ -10,7 +10,7 @@ app.listen(PORT);
 
 import express from "express";
 import connectDb from "./config/db.js";
-import postRoutes from "./routes/postRoutes.js";
+import routes from "./routes/routes.js";
 
 const app = express();
 
@@ -21,7 +21,7 @@ connectDb();
 app.use(express.json());
 
 // Route pour créer un post
-app.use(postRoutes);
+app.use(routes);
 
 const PORT = 3000;
 
