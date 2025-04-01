@@ -2,11 +2,6 @@ import mongoose from "mongoose";
 
 const mediaSchema = new mongoose.Schema(
   {
-    type: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "MediaType",
-      required: true,
-    },
     url: {
       type: String,
       required: true,

@@ -3,7 +3,7 @@ import Media from "../models/mediaSchema.js";
 export const createMediaRepository = async (mediaData) => {
   try {
     const newMedia = await Media(mediaData); // Création d'une nouvelle instance de média
-    const savedMedia = await newMedia.save(); // Sauvegarde le post dans la bdd
+    const savedMedia = await newMedia.save(); // Sauvegarde le media dans la bdd
 
     return savedMedia;
   } catch (error) {
@@ -11,29 +11,28 @@ export const createMediaRepository = async (mediaData) => {
   }
 };
 
-export const getMediaByPostIdRepository = async (mediaId) => {
+export const getMediaByPostIdRepository = async (postId) => {
   try {
-    if (!mediaId) {
+    if (!postId) {
       throw new Error("Id du média non fourni");
     }
     // On récupère les média par id avec find by id
-    const getMediaByPostId = await Media.findById(mediaId);
-    console.log(" ID de média : ", mediaId);
-    if (!getMediaByPostId) {
-      throw new Error(`Media avec l'id ${mediaId} non trouvé `);
-    }
-    console.log("GetMediaByPostidRepository :", getMediaByPostId);
+    const getMediaByPostId = await Media.find({ post_media: postId });
 
-    return getMediaByPostId;
+    if (!getMediaByPostId) {
+      throw new Error(`Media avec l'id ${postId} non trouvé `);
+    }
+
+    return { getMediaByPostId };
   } catch (error) {
-    throw new Error(`Erreur lors de la récupération du média : " ${error.message}`);
+    throw new Error(`Erreur lors de la récupération du média avec l'id${postId}: " ${error.message}`);
   }
 };
 
-export const getAllMediaRepository = async () => {
+export const getAllMediaRepository = async (mediaData) => {
   try {
     // On récupere tous les médias avec .find
-    const getMedia = await Media.find();
+    const getMedia = await Media.find({ post_media: mediaData });
     return getMedia;
   } catch (error) {
     throw new Error(`Erreur lors de la récupération de tous les médias : ${error.message}`);
@@ -82,9 +81,4 @@ export const deleteMediaRepository = async (mediaId) => {
   } catch (error) {
     throw new Error(`Erreur lors de la suppression du média : ", ${error.message}`);
   }
-};
-
-export const getMediaByPost = async (postId) => {
-  const mediaByPost = await Media.find({ post_media: postId });
-  return mediaByPost;
 };

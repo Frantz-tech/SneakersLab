@@ -1,3 +1,4 @@
+import Media from "../models/mediaSchema.js";
 import Post from "../models/postsSchema.js";
 
 export const createPostRepository = async (postData) => {
@@ -14,13 +15,12 @@ export const getPostByIdRepository = async (postId) => {
   try {
     // On récupere les post par id avec findById
     const getPostById = await Post.findById(postId);
-    console.log(postId);
 
     // Si l'id n'existe pas on envoie une erreur
     if (!getPostById) {
       throw new Error(`Post avec l'id ${postId} non trouvé`);
     }
-    return getPostById;
+    return { getPostById };
   } catch (error) {
     throw new Error(`Erreur lors de la récupération du post avec l'Id ${postId}: ${error.message}`);
   }
@@ -29,8 +29,11 @@ export const getPostByIdRepository = async (postId) => {
 export const getAllPostRepository = async () => {
   try {
     // On récupere tout les post avec .find
-    const getPost = await Post.find();
-    return getPost;
+    const getAllPost = await Post.find();
+
+    const getAllMedia = await Media.find();
+
+    return { getAllPost, getAllMedia };
   } catch (error) {
     throw new Error("Erreur lors de la récupération de tous les posts :", error.message);
   }
