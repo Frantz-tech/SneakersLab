@@ -1,4 +1,11 @@
 import {
+  createMediaRepository,
+  deleteMediaRepository,
+  getAllMediaRepository,
+  getMediaByPostIdRepository,
+  updateMediaRepository,
+} from "../repository/mediaRepository.js";
+import {
   createPostRepository,
   deletePostRepository,
   getAllPostRepository,
@@ -6,7 +13,7 @@ import {
   updatePostRepository,
 } from "../repository/postRepository.js";
 
-export const createPostService = async (postData) => {
+export const createPostService = async (postData, mediaData) => {
   try {
     // Validation de la description :
     const errors = [];
@@ -23,7 +30,12 @@ export const createPostService = async (postData) => {
     }
     // Si il n'y a pas d'erreur on crée le post
     const newPost = await createPostRepository(postData);
-    return { newPost };
+
+    mediaData.post_media = newPost._id; // On lie l'id du post avec celui du média
+
+    const newMedia = await createMediaRepository(mediaData); // On crée le média
+
+    return { newPost, newMedia };
   } catch (error) {
     throw new Error(`Erreur lors de la création du nouveau post : ${error.message}`);
   }
@@ -40,7 +52,12 @@ export const getPostByIdService = async (postId) => {
       return { errors };
     }
     const getPost = await getPostByIdRepository(postId);
-    return { getPost };
+    console.log(getPost);
+
+    const getMediaByPostId = await getMediaByPostIdRepository(postId);
+    console.log(getMediaByPostId);
+
+    return { getPost, getMediaByPostId };
   } catch (error) {
     throw new Error(`Erreur lors de la récupération du post avec l'id ${postId}: ${error.message}`);
   }
@@ -49,13 +66,15 @@ export const getPostByIdService = async (postId) => {
 export const getAllPostService = async () => {
   try {
     const errors = [];
-    const allPost = await getAllPostRepository();
-    if (!allPost || allPost.length === 0) {
+    const getAllPost = await getAllPostRepository();
+    if (!getAllPost || getAllPost.length === 0) {
       errors.push("Aucun post n'as été trouvé");
-      console.log("aucun post trouvé");
       return { errors };
     }
-    return { allPost };
+
+    const getAllMedia = await getAllMediaRepository();
+
+    return { getAllPost, getAllMedia };
   } catch (error) {
     throw new Error(`Erreurs lors de la récupération de tous les posts ${error.message}`);
   }
@@ -76,24 +95,38 @@ export const updatePostService = async (postId, updateData) => {
     if (errors.length > 0) {
       return { errors };
     }
-    // Si il n'y a pas d'erreur on crée le post
+    // Si il n'y a pas d'erreur on met à jour le post
     const updatePost = await updatePostRepository(postId, updateData);
+
+    // Si un id de média est donné, on met a jour le média et le post
+    if (updateData.mediaId) {
+      const updateMedia = await updateMediaRepository(updateData.mediaId, updateData);
+      return { updateData, updateMedia };
+    }
+
     return { updatePost };
   } catch (error) {
     throw new Error(`Erreur lors de la création du nouveau post : ${error.message}`);
   }
 };
 
-export const deletePostService = async (postId) => {
+export const deletePostService = async (postId, mediaId) => {
   try {
     const errors = [];
-    const deletePost = await deletePostRepository(postId);
-    if (!deletePost || deletePost.length === 0) {
-      errors.push("Aucun post n'as été trouvé pour la suppression");
-      console.log("Aucun post trouvé pour la supp");
-
+    if (!postId) {
+      errors.push("ID non fourni pour la suppression du post ");
+    }
+    if (errors.length > 0) {
       return { errors };
     }
+
+    const deletePost = await deletePostRepository(postId);
+
+    if (mediaId) {
+      const deleteMedia = await deleteMediaRepository(mediaId);
+      return { deletePost, deleteMedia };
+    }
+
     return { deletePost };
   } catch (error) {
     throw new Error(`Erreur lors de la suppression du post ${error.message}`);

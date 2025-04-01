@@ -27,14 +27,15 @@ export const createPostController = async (req, res) => {
 export const getPostController = async (req, res) => {
   try {
     // Appel vers le repository pour récuperer tous les post en BDD
+
     const getPost = await getAllPostService();
-    console.log("Posts à récupérer :", getPost);
+    console.log("Posts à récupérer :", getPost.getAllMedia, getPost.getAllPost);
 
     if (Object.keys(getPost).includes("errors")) {
       return res.status(400).json({ message: "Récupération failed", errors: getPost.errors });
     }
     // retourner les posts avec la réponse crée
-    res.status(200).json({ message: "Post récupérer avec succès", data: getPost.allPost });
+    res.status(200).json({ message: "Post récupérer avec succès", Postdata: getPost.getAllPost });
   } catch (error) {
     res.status(500).json({ message: "Erreur lors de la récupération des posts :", error });
   }
@@ -43,8 +44,9 @@ export const getPostController = async (req, res) => {
 export const getPostByIdController = async (req, res) => {
   try {
     // Appel vers le repository pour recupérer le post avec l'id que l'on veut
-    const getPostId = await getPostByIdService(req.params.id);
-    console.log("Post à récuperer : ", getPostId);
+    const { id, mediaId } = req.params;
+    const getPostId = await getPostByIdService(id, mediaId);
+
     console.log(Object.keys(getPostId).includes("errors"));
 
     // Si le tableau est remplie, on renvoie le tableau avec les erreurs
@@ -53,7 +55,11 @@ export const getPostByIdController = async (req, res) => {
       res.status(400).json({ message: "failed", errors: getPostId.errors });
     }
     // Retourner les posts avec la réponse crée
-    res.status(200).json({ message: "postId récupérer avec succès : ", succes: getPostId });
+    res.status(200).json({
+      message: "postId récupérer avec succès : ",
+      post: getPostId.getPost,
+      media: getPostId.getMediaByPostId,
+    });
   } catch (error) {
     res.status(500).json({ message: "Erreur lors de la récupération du postId :", error });
   }
