@@ -15,27 +15,27 @@ Table User {
   dateInscription DateTime [default: `now()`, not null]
   bio String [not null]
   status Boolean [not null, default: true]
-  badges Badge [not null]
-  usersGroupes UsersGroup [not null]
+  badgeId Int [not null]
+  badge Badge [not null]
+  groups UsersGroup [not null]
 }
 
 Table Badge {
   id Int [pk, increment]
   name BadgeType [not null]
   icon String [not null]
-  userId Int [not null]
-  user User [not null]
+  badge User [not null]
 }
 
 Table Group {
   id Int [pk, increment]
-  adminId Int [not null]
   name String [not null]
-  type String [not null]
+  type GroupeType [not null]
   nbMembres Int [not null, default: 0]
   maxMembres Int
   dateCreation DateTime [default: `now()`, not null]
-  usersGroupes UsersGroup [not null]
+  adminId Int [not null]
+  membres UsersGroup [not null]
 }
 
 Table UsersGroup {
@@ -43,9 +43,8 @@ Table UsersGroup {
   membreId Int [not null]
   groupId Int [not null]
   dateAdhesion DateTime [default: `now()`, not null]
-  isAdmin Boolean [not null, default: false]
   membre User [not null]
-  group Group [not null]
+  groupe Group [not null]
 }
 
 Enum BadgeType {
@@ -56,7 +55,12 @@ Enum BadgeType {
   Community_Helper
 }
 
-Ref: Badge.userId > User.id
+Enum GroupeType {
+  Prive
+  Public
+}
+
+Ref: User.badgeId > Badge.id
 
 Ref: UsersGroup.membreId > User.id
 

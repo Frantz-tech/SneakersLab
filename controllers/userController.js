@@ -11,7 +11,7 @@ import {
 //  ********************************
 
 // Récuperation de tous les utilisateurs
-export const getUsersController = () => {
+export const getAllUsersController = () => {
   return getAllUsersService();
 };
 
