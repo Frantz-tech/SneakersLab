@@ -9,8 +9,8 @@
   },
   "scripts": {
     "test": "",
-    "start": "node index.js",
-    "dev": "node --watch index.js",
+    "start": "node server.js",
+    "dev": "node --watch server.js",
     "prettier": "prettier . --write",
     "prepare": "husky",
     "commit": "git-cz",
