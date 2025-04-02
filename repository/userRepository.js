@@ -5,60 +5,60 @@ const prisma = new PrismaClient();
 //  USERS REPOSITORY
 //  ********************************
 
-export const getAllUsersRepository = () => {
+export const getAllUsersRepository = async () => {
   try {
-    const users = prisma.user.findMany();
+    const users = await prisma.user.findMany();
     return { success: 1, data: users };
   } catch {
-    return { success: 0, error: "Impossible de récuperer les utilisateurs" };
+    return { success: 0, message: "Impossible de récuperer les utilisateurs" };
   }
 };
 
-export const getUserByIdRepository = (id) => {
+export const getUserByIdRepository = async (id) => {
   try {
-    const user = prisma.user.findFirst({
+    const user = await prisma.user.findFirst({
       where: {
         id: parseInt(id),
       },
     });
     return { success: 1, data: user };
   } catch {
-    return { success: 0, error: "Impossible de récuperer l'utilisateur" };
+    return { success: 0, data: "Impossible de récuperer l'utilisateur" };
   }
 };
 
-export const createUserRepository = (user) => {
+export const createUserRepository = async (user) => {
   try {
-    const createdUser = prisma.user.create({
+    const createdUser = await prisma.user.create({
       data: user,
     });
     return { success: 1, data: createdUser };
   } catch {
-    return { success: 0, error: "Impossible de créer l'utilisateur" };
+    return { success: 0, data: "Impossible de créer l'utilisateur" };
   }
 };
 
-export const deleteUserRepository = (id) => {
+export const deleteUserRepository = async (id) => {
   try {
-    const deletedUser = prisma.user.delete({
+    const deletedUser = await prisma.user.delete({
       where: {
         id: parseInt(id),
       },
     });
     return { success: 1, data: deletedUser };
   } catch {
-    return { success: 0, error: "Impossible de supprimer l'utilisateur" };
+    return { success: 0, data: "Impossible de supprimer l'utilisateur" };
   }
 };
 
-export const updatedUserRepository = (id, req) => {
+export const updatedUserRepository = async (id, req) => {
   try {
-    const updatedUser = prisma.user.update({
+    const updatedUser = await prisma.user.update({
       where: { id: parseInt(id) },
       data: req.body,
     });
     return { success: 1, data: updatedUser };
   } catch {
-    return { success: 0, error: "Impossible d'actualiser l'utilisateur" };
+    return { success: 0, data: "Impossible d'actualiser l'utilisateur" };
   }
 };

@@ -11,26 +11,71 @@ import {
 //  ********************************
 
 // Récuperation de tous les utilisateurs
-export const getAllUsersController = () => {
-  return getAllUsersService();
+export const getAllUsersController = async (_, res) => {
+  try {
+    const users = await getAllUsersService();
+    res.status(200).json(users);
+  } catch (error) {
+    res
+      .status(500)
+      .json(
+        `message: 'Erreur lors de la récupération des utilisateurs (userController) :', ${error}`,
+      );
+  }
 };
 
 // Récuperation d'un utilisateur par son id
-export const getUsersByIdController = (id) => {
-  return getUserByIdService(id);
+export const getUserByIdController = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const user = await getUserByIdService(id);
+    res.status(200).json(user);
+  } catch (error) {
+    res
+      .status(500)
+      .json(
+        `message: 'Erreur lors de la récupération de l'utilisateur (userController) :', ${error}`,
+      );
+  }
 };
 
-// insertion d'un utilisateur dans la base de données
-export const createUserController = (user) => {
-  return createUserService(user);
+export const createUserController = async (req, res) => {
+  try {
+    const user = await createUserService(req.body);
+    res.status(200).json(user);
+  } catch (error) {
+    res
+      .status(500)
+      .json(
+        `message: 'Erreur lors de la création de l'utilisateur  (userController) :', ${error}`,
+      );
+  }
 };
 
-// Suppresion d'un utilisateur de la base de données
-export const deleteUserController = (id) => {
-  return deleteUserService(id);
+export const updateUserController = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const user = await updateUserService(id, req.body);
+    res.status(200).json(user);
+  } catch (error) {
+    res
+      .status(500)
+      .json(
+        `message: 'Erreur lors de l'élimination de l'utilisateur (userController) :', ${error}`,
+      );
+  }
 };
 
-// Modification d'un utilisateur dans la base de données
-export const updateUserController = (req, id) => {
-  return updateUserService(id, req);
+export const deleteUserController = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const user = await deleteUserService(id);
+    res.status(200).json(user);
+  } catch (error) {
+    res
+      .status(500)
+      .json(
+        `message: 'Erreur lors de l'élimination de l'utilisateur (userController) :', ${error}`,
+      );
+  }
 };

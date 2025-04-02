@@ -58,7 +58,7 @@ model Group {
   maxMembres    Int?
   dateCreation  DateTime    @default(now())
   adminId       Int 
-
+  
   membres       UsersGroup[]
 }
 
