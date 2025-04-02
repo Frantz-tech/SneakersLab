@@ -35,8 +35,6 @@ export const createUserRepository = async (user) => {
     });
     return { success: 1, data: createdUser };
   } catch (error) {
-    console.log(error);
-
     return {
       success: 0,
       data: "Impossible de créer l'utilisateur",
