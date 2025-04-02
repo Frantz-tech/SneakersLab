@@ -21,7 +21,8 @@ export const getUserByIdRepository = async (id) => {
         id: parseInt(id),
       },
     });
-    return { success: 1, data: user };
+    if (!user) return { success: 1, data: [] };
+    else return { success: 1, data: user };
   } catch {
     return { success: 0, data: "Impossible de récuperer l'utilisateur" };
   }
@@ -33,8 +34,14 @@ export const createUserRepository = async (user) => {
       data: user,
     });
     return { success: 1, data: createdUser };
-  } catch {
-    return { success: 0, data: "Impossible de créer l'utilisateur" };
+  } catch (error) {
+    console.log(error);
+
+    return {
+      success: 0,
+      data: "Impossible de créer l'utilisateur",
+      error: error.message,
+    };
   }
 };
 
@@ -51,11 +58,11 @@ export const deleteUserRepository = async (id) => {
   }
 };
 
-export const updatedUserRepository = async (id, req) => {
+export const updatedUserRepository = async (id, user) => {
   try {
     const updatedUser = await prisma.user.update({
       where: { id: parseInt(id) },
-      data: req.body,
+      data: user,
     });
     return { success: 1, data: updatedUser };
   } catch {

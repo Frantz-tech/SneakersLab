@@ -6,9 +6,9 @@ Table User {
   id Int [pk, increment]
   userName String [not null]
   firstName String [not null]
-  dateNaissance DateTime [unique, not null]
+  dateNaissance DateTime [not null]
   email String [unique, not null]
-  password String [unique, not null]
+  password String [not null]
   pseudo String [unique, not null]
   profilPic String
   expertise String [not null]
