@@ -70,14 +70,12 @@ export const updatePostController = async (req, res) => {
     // Appel vers le repository pour récupérer le post que l'ont veut modifier
     const { id } = req.params;
     const { postData, mediaData } = req.body;
-    console.log("Contenu de la requete sur postman :", req.body);
-
-    console.log("Ici postdata ( données du post pour la modification ) : ", postData);
-    console.log("Ici mediadata ( données du média pour la modification ) : ", mediaData);
+    // console.log("Ici postdata ( données du post pour la modification ) : ", postData);
+    // console.log("Ici mediadata ( données du média pour la modification ) : ", mediaData);
 
     const updatedPost = await updatePostService(id, postData, mediaData);
 
-    console.log("Post et médias mis à jour : ", updatedPost);
+    // console.log("Post et médias mis à jour : ", updatedPost);
     if (updatedPost.errors) {
       return res.status(400).json({ message: "Post update fail : ", error: updatedPost.errors });
     }

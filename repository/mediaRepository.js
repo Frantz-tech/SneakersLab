@@ -46,20 +46,15 @@ export const updateMediaRepository = async (postId, mediaUpdated) => {
     if (!postId) {
       throw new Error("Id du média non fourni pour l'update");
     }
-    const media = await Media.findByIdAndUpdate(postId);
-    console.log("Media à modifier :", media);
-    console.log("Id du média à modifier : ", postId);
+    const { media_name, url } = mediaUpdated;
+    console.log("updateMediaRepository, mediaUpdated", mediaUpdated);
+    console.log("upadateMediaReposry, id media", mediaUpdated._id);
 
-    const updatedMedia = await Media.updateMany(
-      media, // id du média à modifier
-      { $set: mediaUpdated }, // Nouvelles données du média ( url )
-      { new: true, runValidators: true }, // Option pour retourner les données mises à jour
+    const updatedMedia = await Media.findByIdAndUpdate(
+      mediaUpdated._id, // ID du document à modifier
+      { $set: { media_name, url } }, // Mise à jour
+      { new: true, runValidators: true }, // Options
     );
-
-    if (!updatedMedia) {
-      throw new Error(`Le média avec l'id ${postId}, n'as pas été trouvé pour la modification`);
-    }
-    // console.log("updateMediaRepository média modifié :", updatedMedia);
 
     return { updatedMedia };
   } catch (error) {
