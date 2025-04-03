@@ -30,12 +30,19 @@ export const createPostService = async (postData, mediaData) => {
     }
     // Si il n'y a pas d'erreur on crée le post
     const newPost = await createPostRepository(postData);
+    console.log("post créer : ", newPost);
 
-    mediaData.post_media = newPost._id; // On lie l'id du post avec celui du média
+    const mediaCreated = [];
 
-    const newMedia = await createMediaRepository(mediaData); // On crée le média
+    // Itérer sur chaque média pour l'associer au post
+    for (let i = 0; i < mediaData.length; i++) {
+      mediaData[i].post_media = newPost._id; // Lier l'ID du post au média
+      const newMedia = await createMediaRepository(mediaData[i]); // Créer le média
+      console.log("Média créé :", newMedia);
+      mediaCreated.push(newMedia);
+    }
 
-    return { newPost, newMedia };
+    return { newPost, newMedia: mediaCreated };
   } catch (error) {
     throw new Error(`Erreur lors de la création du nouveau post : ${error.message}`);
   }
@@ -80,55 +87,60 @@ export const getAllPostService = async () => {
   }
 };
 
-export const updatePostService = async (postId, updateData) => {
+export const updatePostService = async (postId, updateData, mediaUpdated) => {
   try {
-    // Validation de la description :
+    // Validation de la description
     const errors = [];
-    if (updateData.description.length > 100) {
-      errors.push("La description ne doit pas dépasser les 100 caractères");
+    if (updateData.description && updateData.description.length > 100) {
+      errors.push("La description ne doit pas dépasser 100 caractères");
     }
-    if (!["Unboxing", "Review", "Comparatif", "Rareté", "Customisation"].includes(updateData.categorie)) {
-      errors.push(
-        "La catégorie est obligatoire et doit être l'une des propositions ci dessous :Unboxing , Review, Comparatif, Rareté, Customisation ",
-      );
-    }
+    // if (!["Unboxing", "Review", "Comparatif", "Rareté", "Customisation"].includes(updateData.categorie)) {
+    //   errors.push(
+    //     "La catégorie est obligatoire et doit être l'une des propositions ci dessous :Unboxing , Review, Comparatif, Rareté, Customisation ",
+    //   );
+    // }
+
     if (errors.length > 0) {
       return { errors };
     }
-    // Si il n'y a pas d'erreur on met à jour le post
+    let updatedMedia = [];
     const updatePost = await updatePostRepository(postId, updateData);
+    console.log("Post mis à jour :", updateData);
 
-    // Si un id de média est donné, on met a jour le média et le post
-    if (updateData.mediaId) {
-      const updateMedia = await updateMediaRepository(updateData.mediaId, updateData);
-      return { updateData, updateMedia };
+    // Mettre à jour chaque média associé au post
+    for (let i = 0; i < mediaUpdated.length; i++) {
+      mediaUpdated[i].post_media = postId; // Lier l'ID du post au média
+      const media = await updateMediaRepository(postId, mediaUpdated[i]); // Mettre à jour le média
+      console.log("Média mis à jour :", media);
+      updatedMedia.push(media);
     }
-
-    return { updatePost };
+    // Si il n'y a pas d'erreur, on met à jour le post et les médias
+    return { updatePost, updateMedia: updatedMedia };
   } catch (error) {
-    throw new Error(`Erreur lors de la création du nouveau post : ${error.message}`);
+    throw new Error(`Erreur lors de la modification du post ou des médias : ${error.message}`);
   }
 };
 
-export const deletePostService = async (postId, mediaId) => {
+export const deletePostService = async (postId) => {
   try {
     const errors = [];
     if (!postId) {
-      errors.push("ID non fourni pour la suppression du post ");
+      errors.push("ID non fourni pour la suppression du post");
     }
     if (errors.length > 0) {
       return { errors };
     }
 
+    // Suppression du post
     const deletePost = await deletePostRepository(postId);
+    console.log("Post supprimé : ", deletePost);
 
-    if (mediaId) {
-      const deleteMedia = await deleteMediaRepository(mediaId);
-      return { deletePost, deleteMedia };
-    }
+    // Si un mediaId est fourni, on supprime le média
 
-    return { deletePost };
+    const deleteMedia = await deleteMediaRepository(postId);
+
+    return { deletePost, deleteMedia };
   } catch (error) {
-    throw new Error(`Erreur lors de la suppression du post ${error.message}`);
+    throw new Error(`Erreur lors de la suppression du post : ${error.message}`);
   }
 };

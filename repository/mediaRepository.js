@@ -2,12 +2,14 @@ import Media from "../models/mediaSchema.js";
 
 export const createMediaRepository = async (mediaData) => {
   try {
-    const newMedia = await Media(mediaData); // Création d'une nouvelle instance de média
-    const savedMedia = await newMedia.save(); // Sauvegarde le media dans la bdd
-
-    return savedMedia;
+    console.log("Données du média reçues : ", mediaData); // Log des données avant la création
+    const newMedia = new Media(mediaData);
+    const savedMedia = await newMedia.save();
+    console.log("Média sauvegardé : ", savedMedia); // Log après la sauvegarde
+    return { savedMedia };
   } catch (error) {
-    throw new Error("Erreur lors de la création du média pour le post", error);
+    console.error("Erreur dans createMediaRepository : ", error.message); // Log de l'erreur
+    throw new Error("Erreur lors de la création du média", error);
   }
 };
 
@@ -33,52 +35,60 @@ export const getAllMediaRepository = async (mediaData) => {
   try {
     // On récupere tous les médias avec .find
     const getMedia = await Media.find({ post_media: mediaData });
-    return getMedia;
+    return { getMedia };
   } catch (error) {
     throw new Error(`Erreur lors de la récupération de tous les médias : ${error.message}`);
   }
 };
 
-export const updateMediaRepository = async (mediaId, updateData) => {
+export const updateMediaRepository = async (postId, mediaUpdated) => {
   try {
-    if (!mediaId) {
+    if (!postId) {
       throw new Error("Id du média non fourni pour l'update");
     }
-    const media = await Media.findById(mediaId);
+    const media = await Media.findByIdAndUpdate(postId);
     console.log("Media à modifier :", media);
+    console.log("Id du média à modifier : ", postId);
 
-    const updatedMedia = await Media.findByIdAndUpdate(
-      mediaId, // id du média à modifier
-      updateData, // Nouvelles données du média ( url )
+    const updatedMedia = await Media.updateMany(
+      media, // id du média à modifier
+      { $set: mediaUpdated }, // Nouvelles données du média ( url )
       { new: true, runValidators: true }, // Option pour retourner les données mises à jour
     );
-    if (!updatedMedia) {
-      throw new Error(`Le média avec l'id ${mediaId}, n'as pas été trouvé pour la modification`);
-    }
-    console.log("updateMediaRepository :", updatedMedia);
 
-    return updatedMedia;
+    if (!updatedMedia) {
+      throw new Error(`Le média avec l'id ${postId}, n'as pas été trouvé pour la modification`);
+    }
+    // console.log("updateMediaRepository média modifié :", updatedMedia);
+
+    return { updatedMedia };
   } catch (error) {
-    throw new Error(`Erreur lors de la modification du média : " ${error.message}`);
+    throw new Error(`Erreur lors de la modification du média : ${error.message}`);
   }
 };
 
-export const deleteMediaRepository = async (mediaId) => {
+export const deleteMediaRepository = async (postId) => {
   try {
-    if (!mediaId) {
-      throw new Error("Id non fourni pour la suppression");
-    }
-    // On récupere le média que l'ont veut supprimer
-    const deletedMedia = await Media.findByIdAndDelete(mediaId);
-    console.log(deletedMedia);
+    console.log("Id du post pour supprimer les médias : ", postId);
 
-    if (!deletedMedia) {
-      throw new Error(`Le média avec l'id ${mediaId} non trouvé pour la supp`);
+    if (!postId) {
+      throw new Error("Id du post non fourni pour la suppression des médias");
     }
-    console.log("deleteMediaRepository : ", deletedMedia);
 
-    return deletedMedia;
+    // Récupérer tous les médias associés au postId
+    const mediasToDelete = await Media.find({ post_media: postId });
+
+    if (mediasToDelete.length === 0) {
+      throw new Error(`Aucun média trouvé pour le post avec l'id ${postId}`);
+    }
+
+    // Supprimer tous les médias associés au postId
+    const deletedMedias = await Media.deleteMany({ post_media: postId });
+
+    console.log("Médias supprimés : ", deletedMedias);
+
+    return { deletedMedias };
   } catch (error) {
-    throw new Error(`Erreur lors de la suppression du média : ", ${error.message}`);
+    throw new Error(`Erreur lors de la suppression des médias pour le post ${postId}: ${error.message}`);
   }
 };
