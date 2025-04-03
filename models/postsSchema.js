@@ -15,11 +15,10 @@ const SchemaPost = new mongoose.Schema(
       type: String,
       required: false,
     },
-    // userId: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "Users",
-    //   required: true,
-    // },
+    userId: {
+      type: String, // Stock l'id de Prisma
+      required: false,
+    },
     archives: {
       type: Boolean,
       default: false,

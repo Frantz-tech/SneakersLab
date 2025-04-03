@@ -8,17 +8,17 @@ import {
 
 export const createPostController = async (req, res) => {
   try {
+    const { postData, mediaData } = req.body;
     // Appel vers le service pour créer le post en BDD
-    const savedPost = await createPostService(req.body);
+    const savedPost = await createPostService(postData, mediaData);
     console.log("createController", savedPost);
-    console.log(Object.keys(savedPost).includes("errors"));
 
     // Si le tableau est rempli, on renvoie les erreurs
-    if (Object.keys(savedPost).includes("errors")) {
+    if (savedPost.errors) {
       return res.status(400).json({ message: "Post fail :", errors: savedPost.errors });
     }
     // Retourner le post avec la réponse crée
-    res.status(201).json({ message: "Post success :", data: savedPost.newPost });
+    res.status(201).json({ message: "Post success :", post: savedPost.newPost, media: savedPost.newMedia });
   } catch (error) {
     res.status(500).json({ message: "Erreur lors de la création du nvx post", error });
   }
@@ -68,12 +68,26 @@ export const getPostByIdController = async (req, res) => {
 export const updatePostController = async (req, res) => {
   try {
     // Appel vers le repository pour récupérer le post que l'ont veut modifier
+    const { id } = req.params;
+    const { postData, mediaData } = req.body;
+    console.log("Contenu de la requete sur postman :", req.body);
 
-    const updatedPost = await updatePostService(req.params.id, req.body);
-    console.log("Post mis à jour : ", updatedPost);
+    console.log("Ici postdata ( données du post pour la modification ) : ", postData);
+    console.log("Ici mediadata ( données du média pour la modification ) : ", mediaData);
+
+    const updatedPost = await updatePostService(id, postData, mediaData);
+
+    console.log("Post et médias mis à jour : ", updatedPost);
+    if (updatedPost.errors) {
+      return res.status(400).json({ message: "Post update fail : ", error: updatedPost.errors });
+    }
 
     // Retourner le post mis à jour avec la réponse crée
-    res.status(200).json({ message: "Post mis à jour avec succès", updatedPost });
+    res.status(200).json({
+      message: "Post mis à jour avec succès",
+      updatedPost: updatedPost.updatePost,
+      updateMedia: updatedPost.updateMedia,
+    });
   } catch (error) {
     console.error("Error message: ", error);
     res.status(500).json({ message: "Erreur lors de la modification du post", error });
@@ -83,13 +97,18 @@ export const updatePostController = async (req, res) => {
 export const deletePostController = async (req, res) => {
   try {
     // Appel vers le repository pour récupérer le post que l'ont veut supprimer
+    const { id, mediaId } = req.params;
 
-    const deletePostData = await deletePostService(req.params.id);
+    const deletePostData = await deletePostService(id, mediaId);
     console.log("Id à supprimer : ", req.params.id);
-    console.log(deletePostData);
+    console.log("deletePostController", deletePostData);
 
     // Retourner le post supprimé avec la réponse crée
-    res.status(200).json({ message: "Post supprimé avec succès : ", deletePostData });
+    res.status(200).json({
+      message: "Post supprimé avec succès : ",
+      dataSupprimé: deletePostData.deletePost,
+      mediaSupprimé: deletePostData.deleteMedia,
+    });
   } catch (error) {
     console.error("Erreur message : ", error);
     res.status(500).json({ message: "Erreur lors de la suppression du post : ", error });

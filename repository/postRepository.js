@@ -43,18 +43,19 @@ export const updatePostRepository = async (postId, updateData) => {
   try {
     // On récupère le post que l'ont veut modifier
     const post = await Post.findById(postId);
-    console.log("Post à modifier :  ", post);
+    console.log("Post à modifier :", post);
+    console.log("Id du post à modifier : ", postId);
 
     const updatedPost = await Post.findByIdAndUpdate(
       postId, // L'id du post à modifier
-      updateData, // Les nouvelles données du post
+      { $set: updateData }, // Les nouvelles données du post
       { new: true, runValidators: true }, // Option pour retourner les données mises à jour
     );
 
     if (!updatedPost) {
       throw new Error(`Le post avec l'id ${postId}, n'as pas été trouvé pour la modification`);
     }
-    return updatedPost;
+    return { updatedPost };
   } catch (error) {
     throw new Error(`Erreur lors de la mise à jour du post : ${error.message}`);
   }
@@ -64,12 +65,12 @@ export const deletePostRepository = async (postId) => {
   try {
     // On récupere le post que l'on veut delete
     const deletedPost = await Post.findByIdAndDelete(postId);
-    console.log(postId);
+    console.log("Id du post à supprimer", postId);
 
     if (!deletedPost) {
       throw new Error(`Le post avec l'id ${postId} non trouvé pour la suppression `);
     }
-    return deletedPost;
+    return { deletedPost };
   } catch (error) {
     throw new Error(`Erreur lors de la suppression du post :, ${error.message}`);
   }
