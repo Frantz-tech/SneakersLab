@@ -7,7 +7,9 @@ const prisma = new PrismaClient();
 
 export const getAllUsersRepository = async () => {
   try {
-    const users = await prisma.user.findMany();
+    const users = await prisma.user.findMany({
+      include: { badge: true },
+    });
     return { success: 1, data: users };
   } catch {
     return { success: 0, message: "Impossible de récuperer les utilisateurs" };
@@ -17,9 +19,8 @@ export const getAllUsersRepository = async () => {
 export const getUserByIdRepository = async (id) => {
   try {
     const user = await prisma.user.findFirst({
-      where: {
-        id: parseInt(id),
-      },
+      where: { id: parseInt(id) },
+      include: { badge: true },
     });
     if (!user) return { success: 1, data: [] };
     else return { success: 1, data: user };
