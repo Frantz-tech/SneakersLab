@@ -1,11 +1,11 @@
 import cors from "cors";
 import express from "express";
 import connectDb from "./config/db.js";
-import { routes } from "./routes/routes.js";
+import routes from "./routes/routes.js";
 
 const app = express();
 app.use(cors());
-routes(app);
+
 // Connecter à la base de données :
 connectDb();
 

@@ -18,8 +18,7 @@
     "db:push": "prisma db push",
     "db:view": "prisma studio",
     "db:reset": "prisma migrate reset",
-    "db:status": "prisma migrate status",
-    "dev": "node --watch server.js"
+    "db:status": "prisma migrate status"
   },
   "lint-staged": {
     "*.{js,css,md}": [
@@ -61,6 +60,7 @@
   },
   "dependencies": {
     "@prisma/client": "^6.5.0",
+    "cors": "^2.8.5",
     "express": "^4.21.2",
     "mongoose": "^8.13.0",
     "prisma": "^6.5.0"
