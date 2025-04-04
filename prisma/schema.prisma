@@ -14,64 +14,63 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 generator dbml {
   provider = "prisma-dbml-generator"
 }
-
 
 // =====================
 //        MODELS
 // =====================
 
 model User {
-  id              Int            @id @default(autoincrement())
-  userName        String         @db.VarChar(50)
-  firstName       String         @db.VarChar(50)
-  dateNaissance   DateTime       @unique
-  email           String         @unique @db.VarChar(200)
-  password        String         @unique @db.VarChar(250)
-  pseudo          String         @unique @db.VarChar(100)
-  profilPic       String?        @db.Text
-  expertise       String         @db.VarChar(50)
-  dateInscription DateTime       @default(now())
-  bio             String         @db.VarChar(250)
-  status          Boolean        @default(true)
-  badges          Badge[]
-  usersGroupes    UsersGroup[]
+  id              Int      @id @default(autoincrement())
+  userName        String   @db.VarChar(50)
+  firstName       String   @db.VarChar(50)
+  dateNaissance   DateTime @unique
+  email           String   @unique @db.VarChar(200)
+  password        String   @unique @db.VarChar(250)
+  pseudo          String   @unique @db.VarChar(100)
+  profilPic       String?
+  expertise       String   @db.VarChar(50)
+  dateInscription DateTime @default(now())
+  bio             String   @db.VarChar(250)
+  status          Boolean  @default(true)  
+  badgeId         Int      // clé étrangère vers Badge
+
+  badge           Badge    @relation("badge", fields: [badgeId], references: [id]) 
+  groups          UsersGroup[] 
 }
 
 model Badge {
-  id      Int    @id @default(autoincrement())
-  name    BadgeType
-  icon    String @db.Text
-  userId  Int
-  user    User   @relation(fields: [userId], references: [id])
+  id    Int       @id @default(autoincrement())
+  name  BadgeType
+  icon  String    @db.VarChar(200)
+
+  badge User [] @relation("badge")
 }
 
 model Group {
-  id            Int            @id @default(autoincrement())
-  adminId       Int
-  name          String         @db.VarChar(100)
-  type          String         @db.VarChar(10)
-  nbMembres     Int            @default(0)
-  maxMembres    Int?           
-  dateCreation  DateTime       @default(now())
-  usersGroupes  UsersGroup[]
+  id            Int         @id @default(autoincrement())
+  name          String      @db.VarChar(100)
+  type          GroupeType
+  nbMembres     Int         @default(0)
+  maxMembres    Int?
+  dateCreation  DateTime    @default(now())
+  adminId       Int 
+
+  membres       UsersGroup[]
 }
 
 model UsersGroup {
-  id           Int       @id @default(autoincrement())
+  id           Int      @id @default(autoincrement())
   membreId     Int
   groupId      Int
-  dateAdhesion DateTime  @default(now())
-  isAdmin      Boolean   @default(false)
-  membre       User      @relation(fields: [membreId], references: [id])
-  group        Group     @relation(fields: [groupId], references: [id])
-}
+  dateAdhesion DateTime @default(now())
 
-// =====================
-//        ENUMS
-// =====================
+  membre  User  @relation(fields: [membreId], references: [id])
+  groupe  Group @relation(fields: [groupId], references: [id])
+}
 
 enum BadgeType {
   Influenceur
@@ -79,4 +78,9 @@ enum BadgeType {
   Fidèle
   Modérateur
   Community_Helper
+}
+
+enum GroupeType {
+  Prive
+  Public
 }
