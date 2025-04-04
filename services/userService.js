@@ -5,6 +5,7 @@ import {
   getAllUsersRepository,
   getUserByIdRepository,
   getUserByEmailRepository,
+  getUserByPseudoRepository,
 } from "../repository/userRepository.js";
 import { existeNiveauBadgeRepository, createBadgeRepository } from "../repository/badgeRepository.js";
 
@@ -26,7 +27,8 @@ export const getUserByIdService = async (id) => {
 
 export const createUserService = async (user) => {
   try {
-    const existe = (await getUserByEmailRepository(user.email)).success;
+    const existe =
+      (await getUserByEmailRepository(user.email)).success || (await getUserByPseudoRepository(user.pseudo)).success;
     if (!existe) {
       const niveauInitial = 1; //niveau de depart d'un nouveau utilisateur qui commence du plus bas...
       const existeBadgeInitial = await existeNiveauBadgeRepository(niveauInitial);
