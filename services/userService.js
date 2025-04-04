@@ -4,6 +4,7 @@ import {
   deleteUserRepository,
   getAllUsersRepository,
   getUserByIdRepository,
+  getUserByEmailRepository,
 } from "../repository/userRepository.js";
 import { existeNiveauBadgeRepository, createBadgeRepository } from "../repository/badgeRepository.js";
 
@@ -25,29 +26,23 @@ export const getUserByIdService = async (id) => {
 
 export const createUserService = async (user) => {
   try {
-    console.log("creating user...");
-
-    const niveauInitial = 1; //niveau de depart d'un nouveau utilisateur qui commence du plus bas...
-    const existeBadgeInitial = await existeNiveauBadgeRepository(niveauInitial);
-    console.log("existe le badge initial? " + existeBadgeInitial);
-
-    if (!existeBadgeInitial.existe) {
-      console.log("Creating initial badge...");
-
-      const badgeInitial = {
-        name: "Influenceur",
-        niveau: 1,
-        icon: "",
-      };
-      const initBadge = await createBadgeRepository(badgeInitial);
-      console.log("badge: " + JSON.stringify(initBadge));
+    const existe = (await getUserByEmailRepository(user.email)).success;
+    if (!existe) {
+      const niveauInitial = 1; //niveau de depart d'un nouveau utilisateur qui commence du plus bas...
+      const existeBadgeInitial = await existeNiveauBadgeRepository(niveauInitial);
+      if (!existeBadgeInitial.existe) {
+        const badgeInitial = {
+          name: "Influenceur",
+          niveau: 1,
+          icon: "",
+        };
+        await createBadgeRepository(badgeInitial);
+      }
+      user.badgeId = parseInt(existeBadgeInitial.index);
+      const createdUser = await createUserRepository(user);
+      return createdUser;
     }
-    user.badgeId = parseInt(existeBadgeInitial.index);
-
-    console.log("user: " + JSON.stringify(user));
-
-    const createdUser = await createUserRepository(user);
-    return createdUser;
+    return { error: "Utilisateur existe déjà dans la BBDD" };
   } catch (error) {
     throw "Error lors de la création de l'utilisateur: " + error;
   }

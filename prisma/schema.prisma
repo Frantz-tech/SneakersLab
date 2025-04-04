@@ -32,7 +32,7 @@ model User {
   password        String   @db.VarChar(250)
   pseudo          String   @unique @db.VarChar(100)
   profilPic       String?
-  expertise       String   @db.VarChar(50)
+  expertise       expertiseType
   dateInscription DateTime @default(now())
   bio             String   @db.VarChar(250)
   status          Boolean  @default(true)  
@@ -79,6 +79,13 @@ enum BadgeType {
   Fidèle
   Modérateur
   Community_Helper
+}
+
+enum expertiseType {
+   Débutant
+   Intermédiaire
+   Expert
+   Collectionneur
 }
 
 enum GroupeType {

@@ -11,7 +11,7 @@ Table User {
   password String [not null]
   pseudo String [unique, not null]
   profilPic String
-  expertise String [not null]
+  expertise expertiseType [not null]
   dateInscription DateTime [default: `now()`, not null]
   bio String [not null]
   status Boolean [not null, default: true]
@@ -54,6 +54,13 @@ Enum BadgeType {
   Fidèle
   Modérateur
   Community_Helper
+}
+
+Enum expertiseType {
+  Débutant
+  Intermédiaire
+  Expert
+  Collectionneur
 }
 
 Enum GroupeType {

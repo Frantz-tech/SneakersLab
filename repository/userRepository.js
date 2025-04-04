@@ -29,6 +29,19 @@ export const getUserByIdRepository = async (id) => {
   }
 };
 
+export const getUserByEmailRepository = async (email) => {
+  try {
+    const user = await prisma.user.findFirst({
+      where: { email: email },
+      include: { badge: true },
+    });
+    if (!user) return { success: 0, data: null };
+    else return { success: 1, data: user };
+  } catch {
+    return { success: 0, data: "Impossible de récuperer l'utilisateur" };
+  }
+};
+
 export const createUserRepository = async (user) => {
   try {
     const createdUser = await prisma.user.create({
