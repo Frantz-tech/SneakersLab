@@ -67,3 +67,19 @@ export const updatedBadgeRepository = async (id, badge) => {
     return { success: 0, data: "Impossible d'actualiser le badge" };
   }
 };
+
+export const existeNiveauBadgeRepository = async (niveau) => {
+  try {
+    const existeNiveauBadge = await prisma.badge.findFirst({
+      where: {
+        niveau: niveau,
+      },
+    });
+    return {
+      existe: !(existeNiveauBadge === null),
+      index: existeNiveauBadge ? existeNiveauBadge.id : 1,
+    };
+  } catch (error) {
+    throw "Error (existeNiveauBadgeRepository): " + error;
+  }
+};

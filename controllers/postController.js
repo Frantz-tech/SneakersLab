@@ -11,7 +11,6 @@ export const createPostController = async (req, res) => {
     const { postData, mediaData } = req.body;
     // Appel vers le service pour créer le post en BDD
     const savedPost = await createPostService(postData, mediaData);
-    console.log("createController", savedPost);
 
     // Si le tableau est rempli, on renvoie les erreurs
     if (savedPost.errors) {
@@ -29,7 +28,6 @@ export const getPostController = async (req, res) => {
     // Appel vers le repository pour récuperer tous les post en BDD
 
     const getPost = await getAllPostService();
-    console.log("Posts à récupérer :", getPost.getAllMedia, getPost.getAllPost);
 
     if (Object.keys(getPost).includes("errors")) {
       return res.status(400).json({ message: "Récupération failed", errors: getPost.errors });
@@ -46,8 +44,6 @@ export const getPostByIdController = async (req, res) => {
     // Appel vers le repository pour recupérer le post avec l'id que l'on veut
     const { id, mediaId } = req.params;
     const getPostId = await getPostByIdService(id, mediaId);
-
-    console.log(Object.keys(getPostId).includes("errors"));
 
     // Si le tableau est remplie, on renvoie le tableau avec les erreurs
 
@@ -87,7 +83,6 @@ export const updatePostController = async (req, res) => {
       updateMedia: updatedPost.updateMedia,
     });
   } catch (error) {
-    console.error("Error message: ", error);
     res.status(500).json({ message: "Erreur lors de la modification du post", error });
   }
 };
@@ -98,8 +93,6 @@ export const deletePostController = async (req, res) => {
     const { id, mediaId } = req.params;
 
     const deletePostData = await deletePostService(id, mediaId);
-    console.log("Id à supprimer : ", req.params.id);
-    console.log("deletePostController", deletePostData);
 
     // Retourner le post supprimé avec la réponse crée
     res.status(200).json({
@@ -108,7 +101,6 @@ export const deletePostController = async (req, res) => {
       mediaSupprimé: deletePostData.deleteMedia,
     });
   } catch (error) {
-    console.error("Erreur message : ", error);
     res.status(500).json({ message: "Erreur lors de la suppression du post : ", error });
   }
 };

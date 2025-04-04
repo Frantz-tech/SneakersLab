@@ -22,9 +22,9 @@ export const getBadgeByIdService = async (id) => {
   }
 };
 
-export const createBadgeService = async (Badge) => {
+export const createBadgeService = async (badge) => {
   try {
-    const createdBadge = await createBadgeRepository(Badge);
+    const createdBadge = await createBadgeRepository(badge);
     return createdBadge;
   } catch (error) {
     throw "Error lors de la création du badge: " + error;

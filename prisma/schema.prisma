@@ -45,6 +45,7 @@ model User {
 model Badge {
   id    Int       @id @default(autoincrement())
   name  BadgeType
+  niveau Int
   icon  String    @db.VarChar(200)
 
   badge User [] @relation("badge")

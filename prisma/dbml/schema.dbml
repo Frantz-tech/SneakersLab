@@ -23,6 +23,7 @@ Table User {
 Table Badge {
   id Int [pk, increment]
   name BadgeType [not null]
+  niveau Int [not null]
   icon String [not null]
   badge User [not null]
 }
